@@ -1,0 +1,27 @@
+# Local provider cache
+.terraform/
+
+# State (may contain secrets)
+*.tfstate
+*.tfstate.*
+
+# Variable files (may contain secrets or personal values)
+*.tfvars
+*.tfvars.json
+!example.tfvars
+
+# Saved plans (can contain secrets)
+tfplan
+*.tfplan
+
+# Crash logs and local overrides
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Optional
+.terraformrc
+terraform.rc
