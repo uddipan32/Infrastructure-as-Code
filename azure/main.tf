@@ -159,7 +159,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   # Optional: run a setup script on first boot (see cloud-init.yaml below)
-  # custom_data = base64encode(file("${path.module}/cloud-init.yaml"))
+  custom_data = base64encode(file("${path.module}/cloud-init.yaml"))
 }
 
 output "public_ip" {

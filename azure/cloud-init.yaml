@@ -1,0 +1,47 @@
+#cloud-config
+package_update: true
+package_upgrade: true          # also upgrade existing packages
+
+packages:
+  - nginx
+  - git
+  - curl
+
+write_files:                   # create files with exact contents
+  - path: /etc/nginx/sites-available/myapp
+    permissions: "0644"
+    content: |
+      server {
+        listen 80;
+        location / {
+          proxy_pass http://127.0.0.1:3000;
+          proxy_set_header Host $host;
+        }
+      }
+
+  - path: /etc/systemd/system/myapp.service
+    content: |
+      [Unit]
+      Description=My App
+      After=network.target
+
+      [Service]
+      User=azureuser
+      WorkingDirectory=/opt/app
+      ExecStart=/usr/bin/node server.js
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y nodejs
+  - ln -sf /etc/nginx/sites-available/myapp /etc/nginx/sites-enabled/myapp
+  - rm -f /etc/nginx/sites-enabled/default
+  - git clone https://github.com/you/your-app.git /opt/app
+  - chown -R azureuser:azureuser /opt/app
+  - cd /opt/app && sudo -u azureuser npm ci --omit=dev
+  - systemctl daemon-reload
+  - systemctl enable --now myapp
+  - systemctl reload nginx
