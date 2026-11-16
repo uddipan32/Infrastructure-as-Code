@@ -1,0 +1,7 @@
+---
+- name: Install and start MongoDB
+  hosts: all
+  become: true
+  roles:
+    - role: community.mongodb.mongodb_repository
+    - role: community.mongodb.mongodb_mongod

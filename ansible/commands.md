@@ -1,0 +1,1 @@
+ansible-playbook --inventory ansible/inventory ansible/install-nginx/install-nginx.yml 
